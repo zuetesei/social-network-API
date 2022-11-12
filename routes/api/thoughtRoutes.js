@@ -1,7 +1,15 @@
+const router = require('express').Router();
+
+const {
+    getAllThoughts,
+    createThought
+} = require('../../controllers/thoughtController');
 
 
-
-// get all thoughts 
+// /api/thoughts to GET all and POST new thought
+router.route('/')
+    .get(getAllThoughts)
+    .post(createThought);
 
 // get a single thought by its id 
 
