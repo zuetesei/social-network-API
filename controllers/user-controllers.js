@@ -48,21 +48,52 @@ module.exports = {
                 res.json(userData);
             })
             .catch(err => res.status(400).json(err));
+    },
+    // delete user by id 
+    // BONUS: delete associated thoughts (COME BACK)
+    deleteUser({ params }, res) {
+        User.findOneAndDelete({ _id: params.id })
+            .then(userData => {
+                if (!userData) {
+                    res.status(404).json({ message: 'UHOH! ❌ No user found with that id!' });
+                    return;
+                }
+                res.json(userData);
+            })
+            .catch(err => res.status(400).json(err));
+    },
+    // add friend to user friend list 
+    addFriend(req, res) {
+        User.findOneAndUpdate(
+            { _id: req.params.id },
+            { $addToSet: { friends: req.params.friendId } },
+            { runValidators: true, new: true }
+        )
+            .then((userData) => {
+                if (!userData) {
+                    res.status(404).json({ message: 'UHOH! ❌ No user found with that id!' });
+                    return;
+                }
+            })
+            .catch(err => res.status(400).json(err));
+    },
+    // delete friend from user friend list 
+    deleteFriend(req, res) {
+        User.findOneAndUpdate(
+            { _id: req.params.id },
+            { $pull: { friend: req.params.friendId } },
+            { new: true }
+        )
+            .then((userData) => {
+                if (!userData) {
+                    res.status(404).json({ message: 'UHOH! ❌ No user found with that id!' });
+                    return;
+                }
+            })
+            .catch(err => res.status(400).json(err));
     }
 }
 
 
-
-    // delete to remove user by its id
-    // deleteUser(req, res) {
-
-    // },
-    // post to add a new friend to a user's friend list
-    // addFriend(req, res) {
-
-    // },
-    // removeFriend(req, res) {
-
-    // }
 
 
