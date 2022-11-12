@@ -1,14 +1,16 @@
 const express = require('express');
 const db = require('./config/connection');
-// const userRoutes = require('./routes/api/userRoutes');
+const routes = require('./routes');
 
-
-const app = express();
 const PORT = process.env.PORT || 3000;
+const app = express();
 
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(routes);
 
 db.once('open', () => {
-    app.listen(3000, function () {
-        console.log('Now listening on 3000!')
-    })
+    app.listen(PORT, () => {
+        console.log(`API server listening on port ${PORT}!`);
+    });
 });

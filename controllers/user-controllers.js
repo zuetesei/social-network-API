@@ -1,11 +1,27 @@
+const { User, Thought } = require('../models');
 
-const userController = {
-    // get all users
-    getAllUsers(req, res) {
-        this.getAllUsers.find({})
-            .then((user) => res.json(user))
-            .catch((err) => res.status(500).json(err));
+module.exports = {
+    // get all users 
+    getAllUser(req, res) {
+        User.find({})
+        .then(User => res.json(User))
+        .catch(err => {
+            console.log(err);
+            res.status(400).json(err);
+        });
+    },
+    // create user 
+    createUser({body}, res) {
+        User.create(body)
+        .then((user) => res.json(user))
+        .catch((err) => {
+            console.log(err);
+            return res.json(400).json(err)
+        });
     }
+}
+    // get all users
+    
     // get a single user by its id
     // getUserById({ params }, res) {
     //     User.findOne({ _id: params.id })
@@ -48,5 +64,5 @@ const userController = {
     // removeFriend(req, res) {
 
     // }
-}
+
 
