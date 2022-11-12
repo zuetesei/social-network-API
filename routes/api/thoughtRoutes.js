@@ -19,3 +19,4 @@ router.route('/')
 
 // delete to remove a thought by its id 
 
+module.exports = router;
