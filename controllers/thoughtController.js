@@ -48,5 +48,26 @@ module.exports = {
                 res.json(userData);
             })
             .catch(err => res.status(400).json(err));
+    },
+    deleteThought({ params }, res) {
+        Thought.findOneAndDelete({ _id: params.id })
+            .then(deletedThought => {
+                if (!deletedThought) {
+                    return res.status(404).json({ message: 'UHOH! ❌ No thought found with that id!' });
+                }
+                return User.findOneAndDelete(
+                    { _id: params.id },
+                    { $pull: { thoughts: params.id } },
+                    { new: true }
+                );
+            })
+            .then(userData => {
+                if (!userData) {
+                    res.status(404).json({ message: 'OOPS! ❌ No user found with that ID!' });
+                    return;
+                }
+                res.json(userData);
+            })
+            .catch(err => res.status(400).json(err));
     }
 }
