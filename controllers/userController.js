@@ -50,15 +50,15 @@ module.exports = {
             .catch(err => res.status(400).json(err));
     },
     // delete user by id 
-    // BONUS: delete associated thoughts (COME BACK)
     deleteUser({ params }, res) {
         User.findOneAndDelete({ _id: params.id })
             .then(userData => {
                 if (!userData) {
-                    res.status(404).json({ message: 'UHOH! ❌ No user found with that id!' });
-                    return;
+                    return res.status(404).json({ message: 'UHOH! ❌ No user found with that id!' });
                 }
-                res.json(userData);
+
+                // BONUS: delete associated thoughts 
+                return Thought.deleteMany({ _id: { $in: userData.thoughts } });
             })
             .catch(err => res.status(400).json(err));
     },
