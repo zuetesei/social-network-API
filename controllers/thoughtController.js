@@ -69,5 +69,31 @@ module.exports = {
                 res.json(userData);
             })
             .catch(err => res.status(400).json(err));
+    },
+    // create reaction 
+    createReaction({ params, body }, res) {
+        Thought.findOneAndUpdate(
+            { _id: params.id },
+            { $push: { reaction: body } },
+            { new: true, runValidators: true }
+        )
+            .then(thought => {
+                if (!thought) {
+                    res.status(404).json({ message: 'UHOH! ❌ No thought found with that id!' });
+                    return;
+                }
+                res.json(thought);
+            })
+            .catch(err => res.status(400).json(err));
+    },
+    // delete reaction
+    deleteReaction({ params }, res) {
+        Thought.findOneAndUpdate(
+            { _id: params.id },
+            { $pull: { reaction: body } },
+            { new: true }
+        )
+            .then(thought => res.json(thought))
+            .catch(err => res.json(err));
     }
 }
