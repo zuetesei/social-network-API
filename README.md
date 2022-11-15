@@ -1,4 +1,4 @@
-# Social Nnetwork API
+# Social Network API
 
 ## Description
 This is an API for a social network web application where users can share their thoughts, react to friends’ thoughts, and add other users to a friend list.
