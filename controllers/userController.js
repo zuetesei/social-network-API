@@ -72,17 +72,12 @@ module.exports = {
             { $addToSet: { friends: req.params.friendId } },
             { runValidators: true, new: true }
         )
-            .then((friendData) => {
-                if (!friendData) {
-                    res.status(404).json({ message: 'UHOH! ❌ No user found with that id!' });
-                } else {
-                    res.status(200)({
-                        message: 'Friend list updated!',
-                        user: friendData,
-                    });
-                }
-            })
-            .catch(err => res.status(400).json(err));
+            .then((user) =>
+                !user
+                    ? res.status(404).json({ message: "No User find with this ID!" })
+                    : res.json(user)
+            )
+            .catch((err) => res.status(500).json(err));
     },
     // delete friend from user friend list 
     deleteFriend(req, res) {
@@ -91,22 +86,12 @@ module.exports = {
             { $pull: { friends: req.params.friendId } },
             { new: true }
         )
-            .then((userData) => {
-                if (!userData) {
-                    res.status(404).json({ message: 'UHOH! ❌ No user found with that id!' });
-                } else {
-                    res.status(200)({
-                        message: 'Friend list updated!',
-                        user: friendData,
-                    });
-                }
-            })
-            .catch((err) => {
-                res.status(400).json(err);
-            });
+            .then(
+                (user) =>
+                    !user
+                        ? res.status(404).json({ message: "No User find with this ID!" })
+                        : res.json(user)
+            )
+            .catch((err) => res.status(500).json(err));
     }
-}
-
-
-
-
+};
