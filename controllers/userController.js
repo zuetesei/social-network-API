@@ -60,6 +60,9 @@ module.exports = {
                 // BONUS: delete associated thoughts 
                 return Thought.deleteMany({ _id: { $in: userData.thoughts } });
             })
+            .then(() => {
+                res.json({ message: 'User and associate thoughts deleted. Goodbye!' });
+            })
             .catch(err => res.status(400).json(err));
     },
     // add friend to user friend list 
@@ -69,10 +72,14 @@ module.exports = {
             { $addToSet: { friends: req.params.friendId } },
             { runValidators: true, new: true }
         )
-            .then((userData) => {
-                if (!userData) {
+            .then((friendData) => {
+                if (!friendData) {
                     res.status(404).json({ message: 'UHOH! ❌ No user found with that id!' });
-                    return;
+                } else {
+                    res.status(200)({
+                        message: 'Friend list updated!',
+                        user: friendData,
+                    });
                 }
             })
             .catch(err => res.status(400).json(err));
@@ -81,16 +88,22 @@ module.exports = {
     deleteFriend(req, res) {
         User.findOneAndUpdate(
             { _id: req.params.id },
-            { $pull: { friend: req.params.friendId } },
+            { $pull: { friends: req.params.friendId } },
             { new: true }
         )
             .then((userData) => {
                 if (!userData) {
                     res.status(404).json({ message: 'UHOH! ❌ No user found with that id!' });
-                    return;
+                } else {
+                    res.status(200)({
+                        message: 'Friend list updated!',
+                        user: friendData,
+                    });
                 }
             })
-            .catch(err => res.status(400).json(err));
+            .catch((err) => {
+                res.status(400).json(err);
+            });
     }
 }
 
