@@ -1,4 +1,6 @@
 {
+  "name": "Social-Network-API",
+  "version": "1.0.0",
   "scripts": {
     "dev": "nodemon server.js"
   },
